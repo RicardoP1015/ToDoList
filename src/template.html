@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/00af512445.js" crossorigin="anonymous"></script>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body>
+    <div class="page-container">
+        <header>
+            <nav class="container navbar">
+                <div class="title-wrapper">
+                    <div class="logo"></div>
+                    <h1 class="web-title">ToDos</h1>
+                </div>
+                <div class="nav-wrapper">
+                    <div class="new-todo">
+                        <button type="button" class="navbar-btn" id="new-todo-btn">NEW TODO</button>
+                    </div>
+                    <div class="new-project">
+                        <button type="button" class="navbar-btn" id="new-project-btn">NEW PROJECT</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <aside>
+            <div class="side-bar container">
+                <div class="nav-wrapper">
+                    <i class="fa-solid fa-house"></i>
+                    <h2 id="home-project">Home</h2>
+                </div>
+                <div class="nav-wrapper">
+                    <i class="fa-solid fa-bars"></i>
+                    <h2 id="project-header">Projects</h2>
+                </div>
+                <div class="project-wrapper"></div>
+            </div>
+        </aside>
+
+        <section class="todo-section">
+            <div class="form-popup" id="project-popup">
+                <form id="project-form" action="">
+                    <div class="input-wrapper">
+                        <label class="input-title" for="project-title">Project: Title</label>
+                        <input class="form-input" type="text" name="todo-title" id="todo-title">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-title" for="project-description">Project: Description</label>
+                        <textarea class="form-area" name="project-description" id="project-description" cols="30" rows="10"></textarea>
+                    </div>
+                    <div class="btn-wrapper">
+                        <button class="main-btn" id="add-project-btn" type="button">Add</button>
+                    <button class="main-btn" id="close-project-btn" type="button">Close</button>
+                    </div>
+                </form>
+    
+            </div>
+            <div class="form-popup" id="todo-popup">
+                <form id="todo-form" action="">
+                    <div class="input-wrapper">
+                        <label class="input-title" for="todo-title">Todo: Title</label>
+                        <input class="form-input" type="text" name="todo-title" id="todo-title">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-title" for="todo-description">Todo: Description</label>
+                        <textarea class="form-area" name="todo-description" id="todo-description" cols="30" rows="10"></textarea>
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-title" for="todo-due-date">Todo: DueDate</label>
+                        <input class="form-input" type="date" name="todo-due-date" id="todo-due-date">
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-title" for="todo-priority">Todo: Priority</label>
+                        <select class="form-input" name="todo-priority" id="todo-priority">
+                            <option value="high">High Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="input-title" for="projects">Projects</label>
+                        <select class="form-input" name="projects" id="projects">
+                            <option value="default-project">Default-Project</option>
+                        </select>
+                    </div>
+                    <div class="btn-wrapper">
+                        <button class="main-btn" id="add-todo-btn" type="button">Add</button>
+                    <button class="main-btn" id="close-todo-btn" type="button">Close</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="todo-area">
+
+            </div>
+        </section>
+
+    </div>
+</body>
+
+</html>
