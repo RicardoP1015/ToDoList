@@ -4,6 +4,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    list-style: none;
 }
 
 textarea {
@@ -106,6 +107,20 @@ aside {
         1px 1px 0 #000;
 }
 
+.project-item {
+    margin-left: 13%;
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+    color: white;
+    text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
 #project-form,
 #todo-form {
     display: flex;
@@ -161,8 +176,7 @@ aside {
 #todo-form .input-wrapper:nth-child(1),
 #todo-form .input-wrapper:nth-child(3),
 #todo-form .input-wrapper:nth-child(4),
-#todo-form .input-wrapper:nth-child(5)
-{
+#todo-form .input-wrapper:nth-child(5) {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -175,7 +189,7 @@ aside {
     gap: 10px;
 }
 
-select.form-input  {
+select.form-input {
     padding: 0;
 }
 

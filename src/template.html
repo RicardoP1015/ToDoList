@@ -39,7 +39,9 @@
                     <i class="fa-solid fa-bars"></i>
                     <h2 id="project-header">Projects</h2>
                 </div>
-                <div class="project-wrapper"></div>
+                <div class="project-wrapper">
+                    <ul id="project-container"></ul>
+                </div>
             </div>
         </aside>
 
@@ -48,7 +50,7 @@
                 <form id="project-form" action="">
                     <div class="input-wrapper">
                         <label class="input-title" for="project-title">Project: Title</label>
-                        <input class="form-input" type="text" name="todo-title" id="todo-title">
+                        <input class="form-input" type="text" name="project-title" id="project-title">
                     </div>
                     <div class="input-wrapper">
                         <label class="input-title" for="project-description">Project: Description</label>
@@ -78,14 +80,14 @@
                     <div class="input-wrapper">
                         <label class="input-title" for="todo-priority">Todo: Priority</label>
                         <select class="form-input" name="todo-priority" id="todo-priority">
-                            <option value="high">High Priority</option>
-                            <option value="low">Low Priority</option>
+                            <option value="High">High Priority</option>
+                            <option value="Low">Low Priority</option>
                         </select>
                     </div>
                     <div class="input-wrapper">
                         <label class="input-title" for="projects">Projects</label>
                         <select class="form-input" name="projects" id="projects">
-                            <option value="default-project">Default-Project</option>
+                            <option value="Main">Default-Project</option>
                         </select>
                     </div>
                     <div class="btn-wrapper">
@@ -96,7 +98,7 @@
             </div>
 
             <div id="todo-area">
-
+                <div id="Main-area"></div>
             </div>
         </section>
 
