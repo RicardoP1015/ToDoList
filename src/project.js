@@ -5,7 +5,6 @@ function createProject(title, description, ...todos) {
 
     function addTodo(todo) {
         projectTodos.push(todo);
-        todo.project = projectIndex;
         todo.currentProjectIndex = projectTodos.length - 1;
     }
 

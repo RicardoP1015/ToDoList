@@ -33,7 +33,6 @@ aside {
 }
 
 .page-container {
-    height: 100vh;
     display: grid;
     grid-template-columns: 350px 3fr;
     grid-template-rows: auto 1fr 1fr;
@@ -91,6 +90,7 @@ aside {
 
 .side-bar {
     padding: 15px;
+    height: 100vh;
 }
 
 .side-bar .nav-wrapper {
@@ -200,4 +200,67 @@ select.form-input {
     background-color: aqua;
     align-self: flex-end;
     cursor: pointer;
+}
+
+.todo-card {
+    width: 350px;
+    display: flex;
+    height: 350px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+    background-color: gray;
+    border-radius: 10px;
+}
+
+.todo-title {
+    font-size: 30px;
+    color: white;
+    text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.todo-date,
+.todo-priority {
+    font-size: 20px;
+    color: white;
+    text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.todo-description {
+    font-size: 18px;
+    padding: 3px;
+    background-color: aqua;
+    border: 2px solid;
+    height: 130px;
+    overflow: scroll;
+}
+
+.todo-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.todo-btn {
+    width: 100px;
+    height: 25px;
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: aqua;
+    cursor: pointer;
+}
+
+.project-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }

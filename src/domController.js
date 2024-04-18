@@ -1,3 +1,6 @@
+import { replaceSpacesWithHyphens, handleOpeningProject, reformatDate } from "./appController"
+
+
 function openForm(e) {
     const buttonId = e.target.id
     if (buttonId === 'new-todo-btn') {
@@ -23,6 +26,11 @@ function closeForm(e) {
 function createProjectDom(title) {
     const projectName = document.createElement('li')
     const projectArea = document.createElement('div')
+    const projectSelect = document.getElementById('projects')
+    const projectOption = document.createElement('option')
+
+    projectOption.value = replaceSpacesWithHyphens(title)
+    projectOption.textContent = title
 
     const projectWrapper = document.getElementById('project-container')
     const todoArea = document.getElementById('todo-area')
@@ -30,19 +38,21 @@ function createProjectDom(title) {
 
     projectName.textContent = title
     projectName.classList.add('project-item')
-    projectName.id = `${title}-project`
+    projectName.id = `${replaceSpacesWithHyphens(title)}-project`
+    projectName.addEventListener('click', handleOpeningProject)
 
     projectArea.classList.add(`project-area`)
-    projectArea.id = `${title}-area`
+    projectArea.id = `${replaceSpacesWithHyphens(title)}-area`
 
     projectWrapper.appendChild(projectName)
     todoArea.appendChild(projectArea)
+    projectSelect.appendChild(projectOption)
 }
 
 function createTodoCard(title, date, priority, description, project) {
     const cardHolder = document.getElementById(project)
     const todoCard = document.createElement('div')
-    todoCard.id = title
+    todoCard.id = replaceSpacesWithHyphens(title)
     todoCard.classList.add('todo-card')
 
     const todoTitle = document.createElement('h2')
@@ -65,12 +75,12 @@ function createTodoCard(title, date, priority, description, project) {
     btnWrapper.classList.add('todo-btn-wrapper')
 
     const editBtn = document.createElement('button')
-    editBtn.id = `${title}-edit`
+    editBtn.id = `${replaceSpacesWithHyphens(title)}-edit`
     editBtn.classList.add('todo-btn')
     editBtn.textContent = 'Edit Todo'
 
     const deleteBtn = document.createElement('button')
-    deleteBtn.id = `${title}-delete`
+    deleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete`
     deleteBtn.classList.add('todo-btn')
     deleteBtn.textContent = 'Delete Todo'
 
@@ -82,8 +92,31 @@ function createTodoCard(title, date, priority, description, project) {
     btnWrapper.appendChild(editBtn)
     btnWrapper.appendChild(deleteBtn)
 
-    cardHolder.appendChild(todoCard)
+    if (cardHolder) {
+        cardHolder.appendChild(todoCard)
+    } else {
+        return
+    }
 
 }
 
-export { openForm, closeForm, createProjectDom, createTodoCard }
+function openProjectArea(title) {
+    const todoArea = document.getElementById('todo-area')
+    todoArea.innerHTML = ''
+
+    const projectArea = document.createElement('div')
+    projectArea.id = `${title}-area`
+    projectArea.classList.add('project-area')
+
+    todoArea.appendChild(projectArea)
+
+}
+
+function openProjectsTodos(todos) {
+    todos.forEach(todo => {
+        createTodoCard(todo.title, reformatDate(todo.date), todo.priority, todo.description, `${todo.project}-area`)
+        console.log(todo.project);
+    })
+}
+
+export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos }
