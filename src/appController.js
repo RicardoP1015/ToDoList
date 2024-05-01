@@ -1,13 +1,13 @@
 import { createProject } from "./project";
 import { createTodo } from "./todo";
-import { createProjectDom, createTodoCard, openProjectArea, openProjectsTodos } from "./domController";
-const mainProject = createProject('Main', 'Default all project come here bt default')
+import { createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom } from "./domController";
+const mainProject = createProject('Main', 'Default all project come here by default')
 
 let projects = [
     mainProject
 ]
 
-let todo =[]
+let todo = []
 
 function reformatDate(dateStr) {
     let parts = dateStr.split('-')
@@ -37,10 +37,13 @@ function clearForm(formId) {
 
 function handleOpeningProject(e) {
     const buttonId = e.target.id.replace(/-project$/, '');
-    const foundProject = projects.find(project => project['title'] === buttonId);
+    console.log(replaceSpacesWithHyphens(buttonId));
+    const foundProject = projects.find(project => project['title'] === replaceSpacesWithHyphens(buttonId))
     console.log(foundProject);
-    openProjectArea(foundProject.title)
-    openProjectsTodos(foundProject.todos)
+    if (foundProject) {
+        openProjectArea(foundProject.title)
+        openProjectsTodos(foundProject.todos)
+    }
 }
 
 function handleProjectForm() {
@@ -48,7 +51,7 @@ function handleProjectForm() {
     const newProject = createProject(replaceSpacesWithHyphens(projectFormInfo['project-title']), projectFormInfo['project-description'])
     const projectPopup = document.getElementById('project-popup')
     projectPopup.classList.remove('open-form')
-    createProjectDom(projectFormInfo['project-title'])
+    createProjectDom(projectFormInfo['project-title'], projectFormInfo['project-description'])
     projects.push(newProject)
     clearForm('project-form')
 }
@@ -66,9 +69,55 @@ function handleTodoForm() {
     clearForm('todo-form')
 }
 
-function loadProject(title) {
+function deleteProject(e) {
+    const projectId = e.target.id.replace(/-delete-btn$/, '')
 
+    projects = projects.filter(project => project.title !== replaceSpacesWithHyphens(projectId))
+
+    deleteProjectDoms(projectId)
 }
 
 
-export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate }
+function updateProject(e) {
+    const projectId = e.target.id.replace(/-edit-btn$/, '')
+    const currentProject = projects.find(p => replaceSpacesWithHyphens(p.title) === projectId)
+    console.log(currentProject);
+
+    const projectFormPopup = document.getElementById('project-popup')
+    if (currentProject) {
+        document.getElementById('project-title').value = currentProject.title.replace(/-/g, ' ')
+        document.getElementById('project-description').value = currentProject.description
+        projectFormPopup.classList.add('open-form')
+
+        const saveBtn = document.getElementById('add-project-btn')
+
+        saveBtn.removeEventListener('click', handleProjectForm)
+        saveBtn.onclick = function () {
+
+            const updatedTitle = document.getElementById('project-title').value
+            console.log(updatedTitle);
+            const updatedDescription = document.getElementById('project-description').value
+            currentProject.title = replaceSpacesWithHyphens(updatedTitle)
+            currentProject.description = updatedDescription
+            console.log(currentProject)
+
+            updateProjectDom(projectId, updatedTitle, updatedDescription)
+
+            const foundProject = projects.find(project => project['title'] === replaceSpacesWithHyphens(updatedTitle))
+            foundProject.todos.forEach(todo => {
+                todo.project = `${replaceSpacesWithHyphens(updatedTitle)}`
+            })
+            openProjectsTodos(foundProject.todos)
+
+            clearForm(`project-form`)
+
+            projectFormPopup.classList.remove('open-form')
+            saveBtn.addEventListener('click', handleProjectForm)
+            saveBtn.onclick = null
+        }
+    }
+}
+
+
+
+export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate, deleteProject, updateProject }

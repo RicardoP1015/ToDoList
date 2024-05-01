@@ -108,6 +108,7 @@ aside {
 }
 
 .project-item {
+    align-items: center;
     margin-left: 13%;
     font-size: 25px;
     font-weight: 600;
@@ -119,6 +120,19 @@ aside {
         1px -1px 0 #000,
         -1px 1px 0 #000,
         1px 1px 0 #000;
+}
+
+.project-btn {
+    width: 60px;
+    padding: 2px;
+    background: gainsboro;
+    border: 1px solid;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+.btn-wrapper {
+    display: flex;
 }
 
 #project-form,
@@ -263,4 +277,30 @@ select.form-input {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    overflow: scroll;
+    width: 120px;
+    background-color: rgb(128, 128, 128);
+    color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    opacity: 0;
+    transition: opacity 1s;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }

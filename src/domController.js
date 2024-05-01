@@ -1,4 +1,4 @@
-import { replaceSpacesWithHyphens, handleOpeningProject, reformatDate } from "./appController"
+import { replaceSpacesWithHyphens, handleOpeningProject, reformatDate, deleteProject, updateProject } from "./appController"
 
 
 function openForm(e) {
@@ -23,28 +23,60 @@ function closeForm(e) {
     }
 }
 
-function createProjectDom(title) {
-    const projectName = document.createElement('li')
+function createProjectDom(title, description) {
+
+    const projectContainer = document.getElementById('project-container')
+    const projectWrapper = document.createElement('li')
+    const projectName = document.createElement('span')
+    const projectDescriptionWrapper = document.createElement('div')
+    const projectDescription = document.createElement('span')
     const projectArea = document.createElement('div')
     const projectSelect = document.getElementById('projects')
     const projectOption = document.createElement('option')
+    const projectEditBtn = document.createElement('button')
+    const projectDeleteBtn = document.createElement('button')
+    const btnWrapper = document.createElement('div')
+    const todoArea = document.getElementById('todo-area')
+
+    projectWrapper.classList.add('project-item')
+    projectWrapper.classList.add('tooltip')
+
+    projectName.textContent = title
+    projectName.id = `${replaceSpacesWithHyphens(title)}-project`
+    projectName.addEventListener('click', handleOpeningProject)
 
     projectOption.value = replaceSpacesWithHyphens(title)
     projectOption.textContent = title
 
-    const projectWrapper = document.getElementById('project-container')
-    const todoArea = document.getElementById('todo-area')
     todoArea.innerHTML = ''
 
-    projectName.textContent = title
-    projectName.classList.add('project-item')
-    projectName.id = `${replaceSpacesWithHyphens(title)}-project`
-    projectName.addEventListener('click', handleOpeningProject)
+    projectDescriptionWrapper.classList.add('tooltiptext')
+
+    projectDescription.textContent = description
+    projectDescription.id = `${replaceSpacesWithHyphens(title)}-description`
 
     projectArea.classList.add(`project-area`)
     projectArea.id = `${replaceSpacesWithHyphens(title)}-area`
 
+    projectEditBtn.classList.add('project-btn')
+    projectEditBtn.id = `${replaceSpacesWithHyphens(title)}-edit-btn`
+    projectEditBtn.textContent = 'Edit'
+    projectEditBtn.addEventListener('click', updateProject)
+
+    projectDeleteBtn.classList.add('project-btn')
+    projectDeleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete-btn`
+    projectDeleteBtn.textContent = 'Delete'
+    projectDeleteBtn.addEventListener('click', deleteProject)
+
+    btnWrapper.classList.add('btn-wrapper')
+
+    btnWrapper.appendChild(projectEditBtn)
+    btnWrapper.appendChild(projectDeleteBtn)
+    projectDescriptionWrapper.appendChild(projectDescription)
+    projectDescriptionWrapper.appendChild(btnWrapper)
     projectWrapper.appendChild(projectName)
+    projectWrapper.appendChild(projectDescriptionWrapper)
+    projectContainer.appendChild(projectWrapper)
     todoArea.appendChild(projectArea)
     projectSelect.appendChild(projectOption)
 }
@@ -119,4 +151,56 @@ function openProjectsTodos(todos) {
     })
 }
 
-export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos }
+function deleteProjectDoms(project) {
+    const projectListItem = document.getElementById(`${replaceSpacesWithHyphens(project)}-project`);
+    if (projectListItem) {
+        projectListItem.remove();
+    }
+
+    const projectArea = document.getElementById(`${replaceSpacesWithHyphens(project)}-area`)
+    if (projectArea) {
+        projectArea.remove()
+    }
+
+    const projectOption = document.querySelector(`option[value="${replaceSpacesWithHyphens(project)}"]`)
+    if (projectOption) {
+        projectOption.remove()
+    }
+}
+
+function updateProjectDom(projectId, title, description) {
+    const projectForm = document.getElementById('project-popup')
+    const projectTitleElement = document.querySelector(`#${replaceSpacesWithHyphens(projectId)}-project`)
+    const projectOptionElement = document.querySelector(`option[value="${replaceSpacesWithHyphens(projectId)}"]`)
+    const projectDescriptionElement = document.querySelector(`#${replaceSpacesWithHyphens(projectId)}-description`)
+    const projectEditBtn = document.querySelector(`#${replaceSpacesWithHyphens(projectId)}-edit-btn`)
+    const projectDeleteBtn = document.querySelector(`#${replaceSpacesWithHyphens(projectId)}-delete-btn`)
+    const todoArea = document.querySelector(`#todo-area`)
+    const newTodoArea = document.createElement('div')
+
+    newTodoArea.id = `${replaceSpacesWithHyphens(title)}-area`
+    newTodoArea.classList.add('project-area')
+
+    if (projectTitleElement) projectTitleElement.textContent = title
+    if (projectTitleElement) projectTitleElement.id = `${replaceSpacesWithHyphens(title)}-project`
+    if (projectTitleElement) projectTitleElement.addEventListener('click', handleOpeningProject)
+
+
+    if (projectDescriptionElement) projectDescriptionElement.textContent = description
+    if (projectDescriptionElement) projectDescriptionElement.id = `${replaceSpacesWithHyphens(title)}-description`
+
+    if (projectOptionElement) projectOptionElement.textContent = title
+    if (projectOptionElement) projectOptionElement.value = replaceSpacesWithHyphens(title)
+
+    if (projectEditBtn) projectEditBtn.id = `${replaceSpacesWithHyphens(title)}-edit-btn`
+    if (projectDeleteBtn) projectDeleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete-btn`
+
+    projectForm.classList.remove('open-form')
+
+    todoArea.innerHTML = ''
+    todoArea.appendChild(newTodoArea)
+
+}
+
+
+export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom }
