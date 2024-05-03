@@ -1,21 +1,16 @@
 'use strict';
 function createProject(title, description, ...todos) {
-    let projectIndex = 0;
-    let projectTodos = todos.length > 0 ? todos : [];
+    let projectTodos = todos.length > 0 ? todos : []
 
     function addTodo(todo) {
         projectTodos.push(todo);
     }
 
-    function removeTodo(index) {
-        projectTodos[index].project = 0;
-        delete projectTodos[index].currentProjectIndex;
-        projectTodos.splice(index, 1);
-        projectTodos.forEach((todo, i) => {
-            if (i >= index) {
-                todo.currentProjectIndex--;
-            }
-        });
+    function removeTodo(todoTitle) {
+        const index = projectTodos.findIndex(t => t.title === todoTitle);
+        if (index !== -1) {
+            projectTodos.splice(index, 1)
+        }
     }
 
     return {

@@ -1,6 +1,6 @@
 import { createProject } from "./project";
 import { createTodo } from "./todo";
-import { createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom } from "./domController";
+import { createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom } from "./domController";
 const mainProject = createProject('Main', 'Default all project come here by default')
 
 let projects = [
@@ -58,7 +58,7 @@ function handleProjectForm() {
 
 function handleTodoForm() {
     const todoFormInfo = getFormInfo('todo-form')
-    const newTodo = createTodo(replaceSpacesWithHyphens(todoFormInfo['todo-title']), todoFormInfo.projects, todoFormInfo['todo-due-date'], todoFormInfo['todo-priority'], todoFormInfo['todo-description'])
+    const newTodo = createTodo(replaceSpacesWithHyphens(todoFormInfo['todo-title']), replaceSpacesWithHyphens(todoFormInfo.projects), todoFormInfo['todo-due-date'], todoFormInfo['todo-priority'], todoFormInfo['todo-description'])
     console.log(newTodo);
     const todoPopup = document.getElementById('todo-popup')
     todoPopup.classList.remove('open-form')
@@ -77,6 +77,21 @@ function deleteProject(e) {
     deleteProjectDoms(projectId)
 }
 
+function deleteTodo(e) {
+    const todoId = e.target.id.replace(/-delete$/, '') 
+
+    const currentTodo = todo.find(t => replaceSpacesWithHyphens(t.title) === todoId) 
+    console.log(currentTodo)
+
+    const projectHoldingTodo = projects.find(p => replaceSpacesWithHyphens(p.title) === currentTodo.project)
+    console.log(projectHoldingTodo)
+
+    deleteTodoDom(currentTodo.title)
+
+    projectHoldingTodo.removeTodo(currentTodo.title)
+    console.log(projectHoldingTodo)
+
+}
 
 function updateProject(e) {
     const projectId = e.target.id.replace(/-edit-btn$/, '')
@@ -120,4 +135,4 @@ function updateProject(e) {
 
 
 
-export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate, deleteProject, updateProject }
+export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo }

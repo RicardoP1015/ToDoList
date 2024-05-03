@@ -1,4 +1,4 @@
-import { replaceSpacesWithHyphens, handleOpeningProject, reformatDate, deleteProject, updateProject } from "./appController"
+import { replaceSpacesWithHyphens, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo } from "./appController"
 
 
 function openForm(e) {
@@ -88,6 +88,7 @@ function createTodoCard(title, date, priority, description, project) {
     todoCard.classList.add('todo-card')
 
     const todoTitle = document.createElement('h2')
+    console.log(title);
     todoTitle.textContent = title
     todoTitle.classList.add('todo-title')
 
@@ -115,6 +116,7 @@ function createTodoCard(title, date, priority, description, project) {
     deleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete`
     deleteBtn.classList.add('todo-btn')
     deleteBtn.textContent = 'Delete Todo'
+    deleteBtn.addEventListener('click', deleteTodo)
 
     todoCard.appendChild(todoTitle)
     todoCard.appendChild(todoDueDate)
@@ -152,9 +154,9 @@ function openProjectsTodos(todos) {
 }
 
 function deleteProjectDoms(project) {
-    const projectListItem = document.getElementById(`${replaceSpacesWithHyphens(project)}-project`);
+    const projectListItem = document.getElementById(`${replaceSpacesWithHyphens(project)}-project`)
     if (projectListItem) {
-        projectListItem.remove();
+        projectListItem.remove()
     }
 
     const projectArea = document.getElementById(`${replaceSpacesWithHyphens(project)}-area`)
@@ -165,6 +167,13 @@ function deleteProjectDoms(project) {
     const projectOption = document.querySelector(`option[value="${replaceSpacesWithHyphens(project)}"]`)
     if (projectOption) {
         projectOption.remove()
+    }
+}
+
+function deleteTodoDom(todo) {
+    const todoItem = document.getElementById(replaceSpacesWithHyphens(todo))
+    if(todoItem) {
+        todoItem.remove()
     }
 }
 
@@ -203,4 +212,4 @@ function updateProjectDom(projectId, title, description) {
 }
 
 
-export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom }
+export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom }
