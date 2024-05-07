@@ -1,6 +1,6 @@
 import { createProject } from "./project";
 import { createTodo } from "./todo";
-import { createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom } from "./domController";
+import { createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom, updateTodoDom } from "./domController";
 const mainProject = createProject('Main', 'Default all project come here by default')
 
 let projects = [
@@ -32,7 +32,13 @@ function getFormInfo(formId) {
 
 
 function clearForm(formId) {
-    document.getElementById(formId).reset();
+    const currentForm = document.getElementById(formId);
+    console.log(currentForm);
+    if (currentForm) {
+        currentForm.reset();
+    } else {
+        console.error('Form not found with ID:', formId);
+    }
 }
 
 function handleOpeningProject(e) {
@@ -80,7 +86,7 @@ function deleteProject(e) {
 function deleteTodo(e) {
     const todoId = e.target.id.replace(/-delete$/, '') 
 
-    const currentTodo = todo.find(t => replaceSpacesWithHyphens(t.title) === todoId) 
+    const currentTodo = todo.find(t => replaceSpacesWithHyphens(t.title) === todoId)
     console.log(currentTodo)
 
     const projectHoldingTodo = projects.find(p => replaceSpacesWithHyphens(p.title) === currentTodo.project)
@@ -100,6 +106,7 @@ function updateProject(e) {
 
     const projectFormPopup = document.getElementById('project-popup')
     if (currentProject) {
+        
         document.getElementById('project-title').value = currentProject.title.replace(/-/g, ' ')
         document.getElementById('project-description').value = currentProject.description
         projectFormPopup.classList.add('open-form')
@@ -110,11 +117,10 @@ function updateProject(e) {
         saveBtn.onclick = function () {
 
             const updatedTitle = document.getElementById('project-title').value
-            console.log(updatedTitle);
             const updatedDescription = document.getElementById('project-description').value
+
             currentProject.title = replaceSpacesWithHyphens(updatedTitle)
             currentProject.description = updatedDescription
-            console.log(currentProject)
 
             updateProjectDom(projectId, updatedTitle, updatedDescription)
 
@@ -133,6 +139,59 @@ function updateProject(e) {
     }
 }
 
+function editTodo(e) {
+    const todoId = e.target.id.replace(/-edit$/, '')
+
+    const currentTodo = todo.find(t => replaceSpacesWithHyphens(t.title) === todoId)
+    
+    const projectHoldingTodo = projects.find(p => replaceSpacesWithHyphens(p.title) === currentTodo.project)
+
+    const todoToEdit = projectHoldingTodo.todos.find(t => t.title === currentTodo.title)
+    console.log(todoToEdit);
+
+    const todoFormPopup = document.getElementById('todo-popup')
+
+    if  (todoToEdit) {
+
+        document.getElementById('todo-title').value = todoToEdit.title.replace(/-/g, ' ')
+        document.getElementById('todo-description').value = todoToEdit.description
+        document.getElementById('todo-due-date').value = todoToEdit.date
+        document.getElementById('todo-priority').value = todoToEdit.priority
+        document.getElementById('projects').value = todoToEdit.project
+        todoFormPopup.classList.add('open-form')
+
+        const saveBtn = document.getElementById('add-todo-btn')
+
+        saveBtn.removeEventListener('click', handleTodoForm)
+        saveBtn.onclick = function() {
+            const updatedTitle = document.getElementById('todo-title').value
+            const updatedDescription = document.getElementById('todo-description').value
+            const updatedDueDate = document.getElementById('todo-due-date').value
+            const updatedPriority = document.getElementById('todo-priority').value
+            const updatedProject = document.getElementById('projects').value
+
+            todoToEdit.title = replaceSpacesWithHyphens(updatedTitle)
+            todoToEdit.description = updatedDescription
+            todoToEdit.date = updatedDueDate
+            todoToEdit.priority = updatedPriority
+            todoToEdit.project = updatedProject
+
+            console.log(todoToEdit)
+
+            updateTodoDom(todoId, updatedTitle, updatedDescription, updatedDueDate, updatedPriority, updatedProject)
+
+            clearForm(`todo-form`)
+
+            todoFormPopup.classList.remove('open-form')
+            saveBtn.addEventListener('click', handleTodoForm)
+            saveBtn.onclick = null
+
+        }
+
+    }
+
+}
 
 
-export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo }
+
+export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo, clearForm, editTodo }

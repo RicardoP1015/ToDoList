@@ -1,4 +1,4 @@
-import { replaceSpacesWithHyphens, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo } from "./appController"
+import { replaceSpacesWithHyphens, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo, clearForm, editTodo } from "./appController"
 
 
 function openForm(e) {
@@ -14,12 +14,15 @@ function openForm(e) {
 
 function closeForm(e) {
     const buttonId = e.target.id
+    console.log(buttonId);
     if (buttonId === 'close-todo-btn') {
         const todoForm = document.getElementById('todo-popup')
         todoForm.classList.remove('open-form')
+        clearForm(`todo-form`)
     } else if (buttonId === 'close-project-btn') {
         const projectForm = document.getElementById('project-popup')
         projectForm.classList.remove('open-form')
+        clearForm(`project-form`)
     }
 }
 
@@ -88,7 +91,7 @@ function createTodoCard(title, date, priority, description, project) {
     todoCard.classList.add('todo-card')
 
     const todoTitle = document.createElement('h2')
-    console.log(title);
+    console.log(title)
     todoTitle.textContent = title
     todoTitle.classList.add('todo-title')
 
@@ -111,6 +114,7 @@ function createTodoCard(title, date, priority, description, project) {
     editBtn.id = `${replaceSpacesWithHyphens(title)}-edit`
     editBtn.classList.add('todo-btn')
     editBtn.textContent = 'Edit Todo'
+    editBtn.addEventListener('click', editTodo)
 
     const deleteBtn = document.createElement('button')
     deleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete`
@@ -211,5 +215,12 @@ function updateProjectDom(projectId, title, description) {
 
 }
 
+function updateTodoDom( previousTitle ,title, description, dueDate, priority, project) {
+    const previousTodo = document.getElementById(previousTitle)
+    if (previousTodo) previousTodo.remove()
 
-export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom }
+    createTodoCard(title, reformatDate(dueDate), priority, description, `${project}-area`)
+}
+
+
+export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom, updateTodoDom }

@@ -17,7 +17,6 @@ function createProject(title, description, ...todos) {
         title,
         description: description || '',
         todos: projectTodos,
-        index: projectIndex,
         addTodo,
         removeTodo
     };
