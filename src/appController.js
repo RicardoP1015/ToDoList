@@ -1,5 +1,5 @@
-import { createProject } from "./project";
-import { createTodo } from "./todo";
+import { createProject } from "./project"
+import { createTodo } from "./todo"
 import { createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom, updateTodoDom } from "./domController";
 const mainProject = createProject('Main', 'Default all project come here by default')
 
@@ -33,19 +33,18 @@ function getFormInfo(formId) {
 
 function clearForm(formId) {
     const currentForm = document.getElementById(formId);
-    console.log(currentForm);
+    console.log(currentForm)
     if (currentForm) {
-        currentForm.reset();
+        currentForm.reset()
     } else {
         console.error('Form not found with ID:', formId);
     }
 }
 
 function handleOpeningProject(e) {
-    const buttonId = e.target.id.replace(/-project$/, '');
-    console.log(replaceSpacesWithHyphens(buttonId));
+    const buttonId = e.target.id.replace(/-project$/, '')
     const foundProject = projects.find(project => project['title'] === replaceSpacesWithHyphens(buttonId))
-    console.log(foundProject);
+    console.log(foundProject)
     if (foundProject) {
         openProjectArea(foundProject.title)
         openProjectsTodos(foundProject.todos)
@@ -60,6 +59,7 @@ function handleProjectForm() {
     createProjectDom(projectFormInfo['project-title'], projectFormInfo['project-description'])
     projects.push(newProject)
     clearForm('project-form')
+    saveToLocalStorage()
 }
 
 function handleTodoForm() {
@@ -73,6 +73,7 @@ function handleTodoForm() {
     currentProject.addTodo(newTodo)
     createTodoCard(todoFormInfo['todo-title'], reformatDate(todoFormInfo['todo-due-date']), todoFormInfo['todo-priority'], todoFormInfo['todo-description'], `${todoFormInfo.projects}-area`)
     clearForm('todo-form')
+    saveToLocalStorage()
 }
 
 function deleteProject(e) {
@@ -81,14 +82,17 @@ function deleteProject(e) {
     projects = projects.filter(project => project.title !== replaceSpacesWithHyphens(projectId))
 
     deleteProjectDoms(projectId)
+
+    saveToLocalStorage()
 }
 
 function deleteTodo(e) {
-    const todoId = e.target.id.replace(/-delete$/, '') 
+    const todoId = e.target.id.replace(/-delete$/, '')
 
     const currentTodo = todo.find(t => replaceSpacesWithHyphens(t.title) === todoId)
     console.log(currentTodo)
 
+    console.log(projects);
     const projectHoldingTodo = projects.find(p => replaceSpacesWithHyphens(p.title) === currentTodo.project)
     console.log(projectHoldingTodo)
 
@@ -97,6 +101,7 @@ function deleteTodo(e) {
     projectHoldingTodo.removeTodo(currentTodo.title)
     console.log(projectHoldingTodo)
 
+    saveToLocalStorage()
 }
 
 function updateProject(e) {
@@ -106,7 +111,7 @@ function updateProject(e) {
 
     const projectFormPopup = document.getElementById('project-popup')
     if (currentProject) {
-        
+
         document.getElementById('project-title').value = currentProject.title.replace(/-/g, ' ')
         document.getElementById('project-description').value = currentProject.description
         projectFormPopup.classList.add('open-form')
@@ -135,6 +140,8 @@ function updateProject(e) {
             projectFormPopup.classList.remove('open-form')
             saveBtn.addEventListener('click', handleProjectForm)
             saveBtn.onclick = null
+            saveToLocalStorage()
+
         }
     }
 }
@@ -143,7 +150,7 @@ function editTodo(e) {
     const todoId = e.target.id.replace(/-edit$/, '')
 
     const currentTodo = todo.find(t => replaceSpacesWithHyphens(t.title) === todoId)
-    
+
     const projectHoldingTodo = projects.find(p => replaceSpacesWithHyphens(p.title) === currentTodo.project)
 
     const todoToEdit = projectHoldingTodo.todos.find(t => t.title === currentTodo.title)
@@ -151,7 +158,7 @@ function editTodo(e) {
 
     const todoFormPopup = document.getElementById('todo-popup')
 
-    if  (todoToEdit) {
+    if (todoToEdit) {
 
         document.getElementById('todo-title').value = todoToEdit.title.replace(/-/g, ' ')
         document.getElementById('todo-description').value = todoToEdit.description
@@ -163,7 +170,7 @@ function editTodo(e) {
         const saveBtn = document.getElementById('add-todo-btn')
 
         saveBtn.removeEventListener('click', handleTodoForm)
-        saveBtn.onclick = function() {
+        saveBtn.onclick = function () {
             const updatedTitle = document.getElementById('todo-title').value
             const updatedDescription = document.getElementById('todo-description').value
             const updatedDueDate = document.getElementById('todo-due-date').value
@@ -185,6 +192,8 @@ function editTodo(e) {
             todoFormPopup.classList.remove('open-form')
             saveBtn.addEventListener('click', handleTodoForm)
             saveBtn.onclick = null
+            saveToLocalStorage()
+
 
         }
 
@@ -192,6 +201,56 @@ function editTodo(e) {
 
 }
 
+function saveToLocalStorage() {
+    localStorage.setItem('projects', JSON.stringify(projects));
+    localStorage.setItem('todos', JSON.stringify(todo));
+    console.log(projects, todo);
+}
+
+function loadFromLocalStorage() {
+    const storedProjects = localStorage.getItem('projects');
+    const storedTodos = localStorage.getItem('todos');
+
+    projects = [mainProject];
+    todo = [];
+
+    if (storedProjects) {
+        const parsedProjects = JSON.parse(storedProjects);
+        parsedProjects.forEach(projData => {
+            if (projData.title === 'Main') {
+
+                projData.todos.forEach(todoData => {
+                    const newTodo = createTodo(
+                        todoData.title,
+                        todoData.project,
+                        todoData.date,
+                        todoData.priority,
+                        todoData.description
+                    )
+                    mainProject.addTodo(newTodo)
+                    todo.push(newTodo)
+                })
+            } else {
+                const project = createProject(projData.title, projData.description)
+                createProjectDom(projData.title, projData.description)
+                projects.push(project)
+                projData.todos.forEach(todoData => {
+                    const newTodo = createTodo(
+                        todoData.title,
+                        todoData.project,
+                        todoData.date,
+                        todoData.priority,
+                        todoData.description
+                    )
+                    project.addTodo(newTodo)
+                    todo.push(newTodo)
+                });
+            }
+        })
+    }
+
+}
 
 
-export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo, clearForm, editTodo }
+
+export { handleProjectForm, handleTodoForm, replaceSpacesWithHyphens, projects, todo, handleOpeningProject, reformatDate, deleteProject, updateProject, deleteTodo, clearForm, editTodo, loadFromLocalStorage }

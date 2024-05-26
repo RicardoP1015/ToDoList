@@ -27,115 +27,109 @@ function closeForm(e) {
 }
 
 function createProjectDom(title, description) {
+    const projectContainer = document.getElementById('project-container');
+    const projectWrapper = document.createElement('li');
+    const projectName = document.createElement('span');
+    const projectDescriptionWrapper = document.createElement('div');
+    const projectDescription = document.createElement('span');
+    const projectArea = document.createElement('div');
+    const projectSelect = document.getElementById('projects');
+    const projectOption = document.createElement('option');
+    const projectEditBtn = document.createElement('button');
+    const projectDeleteBtn = document.createElement('button');
+    const btnWrapper = document.createElement('div');
+    const todoArea = document.getElementById('todo-area');
+    const homeButton = document.getElementById('Main-project');
 
-    const projectContainer = document.getElementById('project-container')
-    const projectWrapper = document.createElement('li')
-    const projectName = document.createElement('span')
-    const projectDescriptionWrapper = document.createElement('div')
-    const projectDescription = document.createElement('span')
-    const projectArea = document.createElement('div')
-    const projectSelect = document.getElementById('projects')
-    const projectOption = document.createElement('option')
-    const projectEditBtn = document.createElement('button')
-    const projectDeleteBtn = document.createElement('button')
-    const btnWrapper = document.createElement('div')
-    const todoArea = document.getElementById('todo-area')
+    projectWrapper.classList.add('project-item', 'tooltip');
+    projectName.textContent = title;
+    projectName.classList.add('project-button', 'highlighted');
+    homeButton.classList.remove('highlighted');
 
-    projectWrapper.classList.add('project-item')
-    projectWrapper.classList.add('tooltip')
+    projectName.id = `${replaceSpacesWithHyphens(title)}-project`;
+    projectName.addEventListener('click', handleOpeningProject);
 
-    projectName.textContent = title
-    projectName.id = `${replaceSpacesWithHyphens(title)}-project`
-    projectName.addEventListener('click', handleOpeningProject)
+    projectOption.value = replaceSpacesWithHyphens(title);
+    projectOption.textContent = title;
 
-    projectOption.value = replaceSpacesWithHyphens(title)
-    projectOption.textContent = title
+    projectDescriptionWrapper.classList.add('tooltiptext');
+    projectDescription.textContent = description;
+    projectDescription.id = `${replaceSpacesWithHyphens(title)}-description`;
 
-    todoArea.innerHTML = ''
+    projectArea.classList.add('project-area');
+    projectArea.id = `${replaceSpacesWithHyphens(title)}-area`;
 
-    projectDescriptionWrapper.classList.add('tooltiptext')
+    projectEditBtn.classList.add('project-btn');
+    projectEditBtn.id = `${replaceSpacesWithHyphens(title)}-edit-btn`;
+    projectEditBtn.textContent = 'Edit';
+    projectEditBtn.addEventListener('click', updateProject);
 
-    projectDescription.textContent = description
-    projectDescription.id = `${replaceSpacesWithHyphens(title)}-description`
+    projectDeleteBtn.classList.add('project-btn');
+    projectDeleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete-btn`;
+    projectDeleteBtn.textContent = 'Delete';
+    projectDeleteBtn.addEventListener('click', deleteProject);
 
-    projectArea.classList.add(`project-area`)
-    projectArea.id = `${replaceSpacesWithHyphens(title)}-area`
-
-    projectEditBtn.classList.add('project-btn')
-    projectEditBtn.id = `${replaceSpacesWithHyphens(title)}-edit-btn`
-    projectEditBtn.textContent = 'Edit'
-    projectEditBtn.addEventListener('click', updateProject)
-
-    projectDeleteBtn.classList.add('project-btn')
-    projectDeleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete-btn`
-    projectDeleteBtn.textContent = 'Delete'
-    projectDeleteBtn.addEventListener('click', deleteProject)
-
-    btnWrapper.classList.add('btn-wrapper')
-
-    btnWrapper.appendChild(projectEditBtn)
-    btnWrapper.appendChild(projectDeleteBtn)
-    projectDescriptionWrapper.appendChild(projectDescription)
-    projectDescriptionWrapper.appendChild(btnWrapper)
-    projectWrapper.appendChild(projectName)
-    projectWrapper.appendChild(projectDescriptionWrapper)
-    projectContainer.appendChild(projectWrapper)
-    todoArea.appendChild(projectArea)
-    projectSelect.appendChild(projectOption)
+    btnWrapper.classList.add('btn-wrapper');
+    btnWrapper.appendChild(projectEditBtn);
+    btnWrapper.appendChild(projectDeleteBtn);
+    projectDescriptionWrapper.appendChild(projectDescription);
+    projectDescriptionWrapper.appendChild(btnWrapper);
+    projectWrapper.appendChild(projectName);
+    projectWrapper.appendChild(projectDescriptionWrapper);
+    projectContainer.appendChild(projectWrapper);
+    todoArea.appendChild(projectArea);
+    projectSelect.appendChild(projectOption);
 }
 
 function createTodoCard(title, date, priority, description, project) {
-    const cardHolder = document.getElementById(project)
-    const todoCard = document.createElement('div')
-    todoCard.id = replaceSpacesWithHyphens(title)
-    todoCard.classList.add('todo-card')
+    const cardHolder = document.getElementById(project);
+    const todoCard = document.createElement('div');
+    todoCard.id = replaceSpacesWithHyphens(title);
+    todoCard.classList.add('todo-card');
 
-    const todoTitle = document.createElement('h2')
-    console.log(title)
-    todoTitle.textContent = title
-    todoTitle.classList.add('todo-title')
+    const todoTitle = document.createElement('h2');
+    todoTitle.textContent = title;
+    todoTitle.classList.add('todo-title');
 
-    const todoDueDate = document.createElement('h3')
-    todoDueDate.textContent = date
-    todoDueDate.classList.add('todo-date')
+    const todoDueDate = document.createElement('h3');
+    todoDueDate.textContent = date;
+    todoDueDate.classList.add('todo-date');
 
-    const todoPriority = document.createElement('h3')
-    todoPriority.textContent = `${priority}:Priority`
-    todoPriority.classList.add('todo-priority')
+    const todoPriority = document.createElement('h3');
+    todoPriority.textContent = `${priority}:Priority`;
+    todoPriority.classList.add('todo-priority');
 
-    const todoDescription = document.createElement('p')
-    todoDescription.textContent = description
-    todoDescription.classList.add('todo-description')
+    const todoDescription = document.createElement('p');
+    todoDescription.textContent = description;
+    todoDescription.classList.add('todo-description');
 
-    const btnWrapper = document.createElement('div')
-    btnWrapper.classList.add('todo-btn-wrapper')
+    const btnWrapper = document.createElement('div');
+    btnWrapper.classList.add('todo-btn-wrapper');
 
-    const editBtn = document.createElement('button')
-    editBtn.id = `${replaceSpacesWithHyphens(title)}-edit`
-    editBtn.classList.add('todo-btn')
-    editBtn.textContent = 'Edit Todo'
-    editBtn.addEventListener('click', editTodo)
+    const editBtn = document.createElement('button');
+    editBtn.id = `${replaceSpacesWithHyphens(title)}-edit`;
+    editBtn.classList.add('todo-btn');
+    editBtn.textContent = 'Edit Todo';
+    editBtn.addEventListener('click', editTodo);
 
-    const deleteBtn = document.createElement('button')
-    deleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete`
-    deleteBtn.classList.add('todo-btn')
-    deleteBtn.textContent = 'Delete Todo'
-    deleteBtn.addEventListener('click', deleteTodo)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.id = `${replaceSpacesWithHyphens(title)}-delete`;
+    deleteBtn.classList.add('todo-btn');
+    deleteBtn.textContent = 'Delete Todo';
+    deleteBtn.addEventListener('click', deleteTodo);
 
-    todoCard.appendChild(todoTitle)
-    todoCard.appendChild(todoDueDate)
-    todoCard.appendChild(todoPriority)
-    todoCard.appendChild(todoDescription)
-    todoCard.appendChild(btnWrapper)
-    btnWrapper.appendChild(editBtn)
-    btnWrapper.appendChild(deleteBtn)
+    todoCard.appendChild(todoTitle);
+    todoCard.appendChild(todoDueDate);
+    todoCard.appendChild(todoPriority);
+    todoCard.appendChild(todoDescription);
+    todoCard.appendChild(btnWrapper);
+    btnWrapper.appendChild(editBtn);
+    btnWrapper.appendChild(deleteBtn);
 
     if (cardHolder) {
-        cardHolder.appendChild(todoCard)
-    } else {
-        return
+        cardHolder.appendChild(todoCard);
     }
-
+    
 }
 
 function openProjectArea(title) {
@@ -197,6 +191,8 @@ function updateProjectDom(projectId, title, description) {
     if (projectTitleElement) projectTitleElement.textContent = title
     if (projectTitleElement) projectTitleElement.id = `${replaceSpacesWithHyphens(title)}-project`
     if (projectTitleElement) projectTitleElement.addEventListener('click', handleOpeningProject)
+    if (projectTitleElement) projectTitleElement.addEventListener('click', highlighProjectDom)
+
 
 
     if (projectDescriptionElement) projectDescriptionElement.textContent = description
@@ -222,5 +218,17 @@ function updateTodoDom( previousTitle ,title, description, dueDate, priority, pr
     createTodoCard(title, reformatDate(dueDate), priority, description, `${project}-area`)
 }
 
+function highlighProjectDom() {
+    const buttons = document.querySelectorAll('.project-button')
 
-export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom, updateTodoDom }
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            buttons.forEach(btn => btn.classList.remove('highlighted'))
+
+            this.classList.add('highlighted');
+        })
+    })
+}
+
+
+export { openForm, closeForm, createProjectDom, createTodoCard, openProjectArea, openProjectsTodos, deleteProjectDoms, updateProjectDom, deleteTodoDom, updateTodoDom, highlighProjectDom }

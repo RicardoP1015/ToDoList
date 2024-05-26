@@ -273,6 +273,18 @@ select.form-input {
     cursor: pointer;
 }
 
+.project-button {
+    transition: ease-in-out 0.5s;
+}
+
+.highlighted {
+    color: yellow;
+}
+
+.side-bar .nav-wrapper h2.highlighted {
+    color: yellow;
+}
+
 .project-area {
     display: flex;
     gap: 10px;
